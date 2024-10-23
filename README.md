@@ -3,8 +3,8 @@
 <h1 align="center">go-callvis</h1>
 
 <p align="center">
-  <a href="https://github.com/ofabry/go-callvis/releases"><img src="https://img.shields.io/github/release/ofabry/go-callvis.svg" alt="Github release"></a>
-  <a href="https://github.com/ofabry/go-callvis/actions"><img src="https://github.com/ofabry/go-callvis/actions/workflows/ci.yml/badge.svg" alt="Build status"></a>
+  <a href="https://github.com/yyamada12/go-callvis/releases"><img src="https://img.shields.io/github/release/yyamada12/go-callvis.svg" alt="Github release"></a>
+  <a href="https://github.com/yyamada12/go-callvis/actions"><img src="https://github.com/yyamada12/go-callvis/actions/workflows/ci.yml/badge.svg" alt="Build status"></a>
   <a href="https://github.com/nikolaydubina/go-recipes"><img src="https://raw.githubusercontent.com/nikolaydubina/go-recipes/main/badge.svg?raw=true" alt="go-recipes"></a>
   <a href="https://gophers.slack.com/archives/go-callvis"><img src="https://img.shields.io/badge/gophers%20slack-%23go--callvis-ff69b4.svg" alt="Slack channel"></a>
 </p>
@@ -31,7 +31,7 @@ the code much higher or when you are just simply trying to understand code of so
 
 ### Output preview
 
-[![main](images/main.png)](https://raw.githubusercontent.com/ofabry/go-callvis/master/images/main.png)
+[![main](images/main.png)](https://raw.githubusercontent.com/yyamada12/go-callvis/master/images/main.png)
 
 > Check out the [source code](examples/main) for the above image.
 
@@ -53,17 +53,17 @@ To install go-callvis, run:
 
 ```sh
 # Latest release
-go install github.com/ofabry/go-callvis@latest
+go install github.com/yyamada12/go-callvis@latest
 
 # Development version
-go install github.com/ofabry/go-callvis@master
+go install github.com/yyamada12/go-callvis@master
 ```
 
 Alternatively, clone the repository and compile the source code:
 
 ```sh
 # Clone repository
-git clone https://github.com/ofabry/go-callvis.git
+git clone https://github.com/yyamada12/go-callvis.git
 cd go-callvis
 
 # Compile and install
@@ -170,7 +170,7 @@ Here you can find descriptions for various types of output.
 
 Here is an example for the project [syncthing](https://github.com/syncthing/syncthing).
 
-[![syncthing example](images/syncthing.png)](https://raw.githubusercontent.com/ofabry/go-callvis/master/images/syncthing.png)
+[![syncthing example](images/syncthing.png)](https://raw.githubusercontent.com/yyamada12/go-callvis/master/images/syncthing.png)
 
 > Check out [more examples](examples) and used command options.
 
@@ -181,10 +181,10 @@ Join [#go-callvis](https://gophers.slack.com/archives/go-callvis) channel at [go
 ### How to help
 
 Did you find any bugs or have some suggestions?
-- Feel free to open [new issue](https://github.com/ofabry/go-callvis/issues/new) or start discussion in the slack channel.
+- Feel free to open [new issue](https://github.com/yyamada12/go-callvis/issues/new) or start discussion in the slack channel.
 
 Do you want to contribute to the project?
-- Fork the repository and open a pull request. [Here](https://github.com/ofabry/go-callvis/projects/1) you can find TODO features.
+- Fork the repository and open a pull request. [Here](https://github.com/yyamada12/go-callvis/projects/1) you can find TODO features.
 
 ---
 
