@@ -1,3 +1,4 @@
+// go-callvis: a tool to help visualize the call graph of a Go program.
 package main
 
 import (

@@ -32,16 +32,16 @@ const (
 
 // ==[ type def/func: analysis   ]===============================================
 type renderOpts struct {
-	cacheDir   string
-	focus      string
-	group      []string
-	ignore     []string
-	include    []string
-	limit      []string
-	nointer    bool
-	refresh    bool
-	nostd      bool
-	algo       CallGraphType
+	cacheDir  string
+	focus     string
+	group     []string
+	ignore    []string
+	include   []string
+	limit     []string
+	nointer   bool
+	refresh   bool
+	nostd     bool
+	algo      CallGraphType
 	calleeFunc []string
 }
 
@@ -131,15 +131,15 @@ func (a *analysis) DoAnalysis(
 
 func (a *analysis) OptsSetup() {
 	a.opts = &renderOpts{
-		cacheDir:   *cacheDir,
-		focus:      *focusFlag,
-		group:      []string{*groupFlag},
-		ignore:     []string{*ignoreFlag},
-		include:    []string{*includeFlag},
-		limit:      []string{*limitFlag},
-		nointer:    *nointerFlag,
-		nostd:      *nostdFlag,
-		calleeFunc: strings.Split(*calleeFuncFlag, ","),
+		cacheDir: *cacheDir,
+		focus:    *focusFlag,
+		group:    []string{*groupFlag},
+		ignore:   []string{*ignoreFlag},
+		include:  []string{*includeFlag},
+		limit:    []string{*limitFlag},
+		nointer:  *nointerFlag,
+		nostd:    *nostdFlag,
+		calleeFunc: []string{*calleeFuncFlag},
 	}
 }
 
@@ -148,6 +148,7 @@ func (a *analysis) ProcessListArgs() (e error) {
 	var ignorePaths []string
 	var includePaths []string
 	var limitPaths []string
+	var calleeFunc []string
 
 	for _, g := range strings.Split(a.opts.group[0], ",") {
 		g := strings.TrimSpace(g)
@@ -182,10 +183,18 @@ func (a *analysis) ProcessListArgs() (e error) {
 		}
 	}
 
+	for _, f := range strings.Split(a.opts.calleeFunc[0], ",") {
+		f = strings.TrimSpace(f)
+		if f != "" {
+			calleeFunc = append(calleeFunc, f)
+		}
+	}
+
 	a.opts.group = groupBy
 	a.opts.ignore = ignorePaths
 	a.opts.include = includePaths
 	a.opts.limit = limitPaths
+	a.opts.calleeFunc = calleeFunc
 
 	return
 }
@@ -217,8 +226,8 @@ func (a *analysis) OverrideByHTTP(r *http.Request) {
 	if inc := r.FormValue("include"); inc != "" {
 		a.opts.include[0] = inc
 	}
-	if cf := r.FormValue("calleeFunc"); cf != "" {
-		a.opts.calleeFunc = strings.Split(cf, ",")
+	if callee := r.FormValue("calleeFunc"); callee != "" {
+		a.opts.calleeFunc = strings.Split(callee, ",")
 	}
 	return
 }
