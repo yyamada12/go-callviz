@@ -32,16 +32,17 @@ const (
 
 // ==[ type def/func: analysis   ]===============================================
 type renderOpts struct {
-	cacheDir string
-	focus    string
-	group    []string
-	ignore   []string
-	include  []string
-	limit    []string
-	nointer  bool
-	refresh  bool
-	nostd    bool
-	algo     CallGraphType
+	cacheDir   string
+	focus      string
+	group      []string
+	ignore     []string
+	include    []string
+	limit      []string
+	nointer    bool
+	refresh    bool
+	nostd      bool
+	algo       CallGraphType
+	calleeFunc []string
 }
 
 // mainPackages returns the main packages to analyze.
@@ -130,14 +131,15 @@ func (a *analysis) DoAnalysis(
 
 func (a *analysis) OptsSetup() {
 	a.opts = &renderOpts{
-		cacheDir: *cacheDir,
-		focus:    *focusFlag,
-		group:    []string{*groupFlag},
-		ignore:   []string{*ignoreFlag},
-		include:  []string{*includeFlag},
-		limit:    []string{*limitFlag},
-		nointer:  *nointerFlag,
-		nostd:    *nostdFlag,
+		cacheDir:   *cacheDir,
+		focus:      *focusFlag,
+		group:      []string{*groupFlag},
+		ignore:     []string{*ignoreFlag},
+		include:    []string{*includeFlag},
+		limit:      []string{*limitFlag},
+		nointer:    *nointerFlag,
+		nostd:      *nostdFlag,
+		calleeFunc: strings.Split(*calleeFuncFlag, ","),
 	}
 }
 
@@ -215,6 +217,9 @@ func (a *analysis) OverrideByHTTP(r *http.Request) {
 	if inc := r.FormValue("include"); inc != "" {
 		a.opts.include[0] = inc
 	}
+	if cf := r.FormValue("calleeFunc"); cf != "" {
+		a.opts.calleeFunc = strings.Split(cf, ",")
+	}
 	return
 }
 
@@ -267,6 +272,7 @@ func (a *analysis) Render() ([]byte, error) {
 		a.opts.group,
 		a.opts.nostd,
 		a.opts.nointer,
+		a.opts.calleeFunc,
 	)
 	if err != nil {
 		return nil, fmt.Errorf("processing failed: %v", err)

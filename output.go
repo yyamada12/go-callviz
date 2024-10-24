@@ -32,6 +32,7 @@ func printOutput(
 	groupBy []string,
 	nostd,
 	nointer bool,
+	calleeFunc []string,
 ) ([]byte, error) {
 	var groupType, groupPkg bool
 	for _, g := range groupBy {
@@ -137,6 +138,27 @@ func printOutput(
 			return true
 		}
 		return false
+	}
+
+	var containsCalleeFunc = func(node *callgraph.Node) bool {
+		for _, funcName := range calleeFunc {
+			if strings.Contains(node.Func.Name(), funcName) {
+				return true
+			}
+		}
+		return false
+	}
+
+	var traverseIn = func(node *callgraph.Node, visited map[*callgraph.Node]bool) {
+		if visited[node] {
+			return
+		}
+		visited[node] = true
+		for _, edge := range node.In {
+			if !isSynthetic(edge) {
+				traverseIn(edge.Caller, visited)
+			}
+		}
 	}
 
 	count := 0

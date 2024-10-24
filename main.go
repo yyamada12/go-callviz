@@ -1,4 +1,3 @@
-// go-callvis: a tool to help visualize the call graph of a Go program.
 package main
 
 import (
@@ -30,22 +29,23 @@ Flags:
 `
 
 var (
-	focusFlag     = flag.String("focus", "main", "Focus specific package using name or import path.")
-	groupFlag     = flag.String("group", "pkg", "Grouping functions by packages and/or types [pkg, type] (separated by comma)")
-	limitFlag     = flag.String("limit", "", "Limit package paths to given prefixes (separated by comma)")
-	ignoreFlag    = flag.String("ignore", "", "Ignore package paths containing given prefixes (separated by comma)")
-	includeFlag   = flag.String("include", "", "Include package paths with given prefixes (separated by comma)")
-	nostdFlag     = flag.Bool("nostd", false, "Omit calls to/from packages in standard library.")
-	nointerFlag   = flag.Bool("nointer", false, "Omit calls to unexported functions.")
-	testFlag      = flag.Bool("tests", false, "Include test code.")
-	graphvizFlag  = flag.Bool("graphviz", false, "Use Graphviz's dot program to render images.")
-	httpFlag      = flag.String("http", ":7878", "HTTP service address.")
-	skipBrowser   = flag.Bool("skipbrowser", false, "Skip opening browser.")
-	outputFile    = flag.String("file", "", "output filename - omit to use server mode")
-	outputFormat  = flag.String("format", "svg", "output file format [svg | png | jpg | ...]")
-	cacheDir      = flag.String("cacheDir", "", "Enable caching to avoid unnecessary re-rendering, you can force rendering by adding 'refresh=true' to the URL query or emptying the cache directory")
-	callgraphAlgo = flag.String("algo", string(CallGraphTypeStatic), fmt.Sprintf("The algorithm used to construct the call graph. Possible values inlcude: %q, %q, %q",
+	focusFlag       = flag.String("focus", "main", "Focus specific package using name or import path.")
+	groupFlag       = flag.String("group", "pkg", "Grouping functions by packages and/or types [pkg, type] (separated by comma)")
+	limitFlag       = flag.String("limit", "", "Limit package paths to given prefixes (separated by comma)")
+	ignoreFlag      = flag.String("ignore", "", "Ignore package paths containing given prefixes (separated by comma)")
+	includeFlag     = flag.String("include", "", "Include package paths with given prefixes (separated by comma)")
+	nostdFlag       = flag.Bool("nostd", false, "Omit calls to/from packages in standard library.")
+	nointerFlag     = flag.Bool("nointer", false, "Omit calls to unexported functions.")
+	testFlag        = flag.Bool("tests", false, "Include test code.")
+	graphvizFlag    = flag.Bool("graphviz", false, "Use Graphviz's dot program to render images.")
+	httpFlag        = flag.String("http", ":7878", "HTTP service address.")
+	skipBrowser     = flag.Bool("skipbrowser", false, "Skip opening browser.")
+	outputFile      = flag.String("file", "", "output filename - omit to use server mode")
+	outputFormat    = flag.String("format", "svg", "output file format [svg | png | jpg | ...]")
+	cacheDir        = flag.String("cacheDir", "", "Enable caching to avoid unnecessary re-rendering, you can force rendering by adding 'refresh=true' to the URL query or emptying the cache directory")
+	callgraphAlgo   = flag.String("algo", string(CallGraphTypeStatic), fmt.Sprintf("The algorithm used to construct the call graph. Possible values inlcude: %q, %q, %q",
 		CallGraphTypeStatic, CallGraphTypeCha, CallGraphTypeRta))
+	calleeFuncFlag  = flag.String("calleeFunc", "", "Specify the functions to be used as callee functions (comma-separated).")
 
 	debugFlag   = flag.Bool("debug", false, "Enable verbose log.")
 	versionFlag = flag.Bool("version", false, "Show version and exit.")
