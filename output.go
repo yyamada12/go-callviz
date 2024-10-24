@@ -32,7 +32,7 @@ func printOutput(
 	groupBy []string,
 	nostd,
 	nointer bool,
-	calleeFunc []string,
+	calleeFuncs []string,
 ) ([]byte, error) {
 	var groupType, groupPkg bool
 	for _, g := range groupBy {
@@ -141,25 +141,53 @@ func printOutput(
 	}
 
 	var containsCalleeFunc = func(node *callgraph.Node) bool {
-		for _, funcName := range calleeFunc {
-			if strings.Contains(node.Func.Name(), funcName) {
+		if node == nil || node.Func == nil {
+			return false
+		}
+		for _, funcName := range calleeFuncs {
+			if strings.Contains(strings.ToLower(node.Func.Name()), strings.ToLower(funcName)) {
 				return true
 			}
 		}
 		return false
 	}
 
-	var traverseIn = func(node *callgraph.Node, visited map[*callgraph.Node]bool) {
+	var traverseCaller func(node *callgraph.Node, visited map[*callgraph.Node]bool) map[*ssa.Function]*callgraph.Node
+	traverseCaller = func(node *callgraph.Node, visited map[*callgraph.Node]bool) map[*ssa.Function]*callgraph.Node {
+		nodes := map[*ssa.Function]*callgraph.Node{}
 		if visited[node] {
-			return
+			return nodes
 		}
 		visited[node] = true
+		nodes[node.Func] = node
 		for _, edge := range node.In {
 			if !isSynthetic(edge) {
-				traverseIn(edge.Caller, visited)
+				res := traverseCaller(edge.Caller, visited)
+				for k, v := range res {
+					nodes[k] = v
+				}
 			}
 		}
+		return nodes
 	}
+
+	calleeNodes := map[*ssa.Function]*callgraph.Node{}
+	var addCalleeNodes = func(edge *callgraph.Edge) error {
+		callee := edge.Callee
+		if containsCalleeFunc(callee) {
+			calleeNodes[callee.Func] = callee
+		}
+		return nil
+	}
+	callgraph.GraphVisitEdges(cg, addCalleeNodes)
+	filteredNodes := map[*ssa.Function]*callgraph.Node{}
+	for _, node := range calleeNodes {
+		res := traverseCaller(node, make(map[*callgraph.Node]bool))
+		for k, v := range res {
+			filteredNodes[k] = v
+		}
+	}
+	cg.Nodes = filteredNodes
 
 	count := 0
 	err := callgraph.GraphVisitEdges(cg, func(edge *callgraph.Edge) error {
